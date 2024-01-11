@@ -12,7 +12,7 @@ import { lastValueFrom } from 'rxjs';
 import { GetRepositoriesListReqDto, GetRepositoriesListResDto, } from './dto/repositories-list.dto';
 import { GetRepositoryReqDto } from './dto/repository.dto';
 import { PaginatedListDto } from '../common/dto/paginated.dto';
-import { FindRepositoriesByNameReqDto, FindRepositoriesByNameResDto } from './dto/find-repositories-by-name.dto';
+import { SearcgRepositoriesReqDto, SearchRepositoriesResDto } from './dto/search-repositories.dto';
 
 const gitHubAppPrivateKey = fs.readFileSync(
   path.join(process.cwd(), "resources", GITHUBAPP_PRIVATEKEY_FILENAME),
@@ -78,6 +78,7 @@ export class GithubService {
         list: data.map((repo) => ({
           name: repo.name,
           fullName: repo.full_name,
+          owner: repo.owner.login,
           description: repo.description
         })),
         page: page,
@@ -88,26 +89,29 @@ export class GithubService {
     }
   }
 
-  async findRepositoriesByName(params: FindRepositoriesByNameReqDto): Promise<FindRepositoriesByNameResDto> {
+  async searchRepositories(params: SearcgRepositoriesReqDto): Promise<SearchRepositoriesResDto> {
     const { name, page, per_page } = params;
 
     try {
       const result = await this.octokit.rest.search.repos({
         q: `${name ?? ""} in:name org:${REACT_NATIVE_COMMUNITY_NAME}`,
+        page,
+        per_page
       });
 
-      const { data } = result;
+      const { data } = result;      
 
       return {
         list: data.items.map((repo) => ({
           name: repo.name,
           fullName: repo.full_name,
+          owner: repo.owner.login,
           description: repo.description
         })),
         page,
         perPage: per_page
       }
-    } catch (error) {
+    } catch (error) {      
       throw new NotFoundException("Failed to search repositories.");
     }
   }

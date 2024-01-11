@@ -4,7 +4,7 @@ import { GetRepositoryReqDto, GetRepositoryReqSchema } from './dto/repository.dt
 import { GetRepositoriesListReqDto, GetRepositoriesListReqSchema } from './dto/repositories-list.dto';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { NotFoundError, forkJoin } from 'rxjs';
-import { FindRepositoriesByNameReqDto, FindRepositoriesByNameReqSchema } from './dto/find-repositories-by-name.dto';
+import { SearcgRepositoriesReqDto as SearchRepositoriesReqDto, SearchRepositoriesReqSchema } from './dto/search-repositories.dto';
 
 @ApiTags("GitHub")
 @Controller('github')
@@ -17,10 +17,10 @@ export class GithubController {
     return this.githubService.getRepositoriesList(query);
   }
 
-  @Get("/search-repositories-by-name")
-  @ApiQuery({ type: FindRepositoriesByNameReqSchema })
-  findRepositoriesByName(@Query() query: FindRepositoriesByNameReqDto) {
-    return this.githubService.findRepositoriesByName(query);
+  @Get("/search-repositories")
+  @ApiQuery({ type: SearchRepositoriesReqSchema })
+  searchRepositories(@Query() query: SearchRepositoriesReqDto) {
+    return this.githubService.searchRepositories(query);
   }
 
   @Get("/repository")

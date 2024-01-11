@@ -3,9 +3,9 @@ import { Endpoints } from "@octokit/types/dist-types/generated/Endpoints";
 import { PaginatedListDto } from "../../common/dto/paginated.dto";
 
 type SearchReposParams = Omit<Endpoints["GET /search/repositories"]["parameters"], "q">;
-export type FindRepositoriesByNameReqDto = { name: string } & SearchReposParams;
+export type SearcgRepositoriesReqDto = { name: string } & SearchReposParams;
 
-export class FindRepositoriesByNameReqSchema {
+export class SearchRepositoriesReqSchema {
     @ApiProperty({ required: false })
     name: string;
     @ApiProperty({ required: false })
@@ -14,10 +14,11 @@ export class FindRepositoriesByNameReqSchema {
     per_page: number;
 }
 
-export interface FindRepositoriesByNameItem {
+export interface SearchRepositoriesItem {
     name: string;
     fullName: string;
+    owner: string;
     description: string;
 }
 
-export type FindRepositoriesByNameResDto = PaginatedListDto<FindRepositoriesByNameItem>;
+export type SearchRepositoriesResDto = PaginatedListDto<SearchRepositoriesItem>;

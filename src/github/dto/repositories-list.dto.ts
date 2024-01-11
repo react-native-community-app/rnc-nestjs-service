@@ -26,6 +26,7 @@ export class GetRepositoriesListReqSchema {
 export interface GetRepositoriesListItem {
     name: string;
     fullName: string;
+    owner: string;
     description: string;
 }
 
